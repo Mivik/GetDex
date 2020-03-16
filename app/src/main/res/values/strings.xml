@@ -1,0 +1,5 @@
+<resources>
+	<string name="app_name">GetDex</string>
+	<string name="constants_display">Self package name: %s\nTarget package name: %s</string>
+	<string name="wrong_config">Wrong config!!\nYou should set the "SELF_PACKAGE_NAME" in com.mivik.mxp.Const to "%s"</string>
+</resources>

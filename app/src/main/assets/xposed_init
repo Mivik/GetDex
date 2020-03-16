@@ -1,0 +1,3 @@
+com.mivik.mxp.MXPHookLoadPackage
+com.mivik.mxp.MXPHookInitPackageResources
+com.mivik.getdex.ZygoteHook

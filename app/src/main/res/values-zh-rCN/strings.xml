@@ -1,0 +1,5 @@
+<resources>
+	<string name="app_name">GetDex</string>
+	<string name="constants_display">当前程序包名：%s\n目标程序包名：%s</string>
+	<string name="wrong_config">检测到配置错误！\n你应该将 com.mivik.mxp.Const 中的 "SELF_PACKAGE_NAME" 成员设置为 "%s"</string>
+</resources>
