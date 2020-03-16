@@ -18,7 +18,7 @@
 
 GetDex is designed as a Xposed plugin to dump dex, which can also fix dex opcodes that are replaced with nop.
 
-Before starting, you should have either [Xposed](https://github.com/rovo89/XposedInstaller) or [EdXposed](https://github.com/ElderDrivers/EdXposedManager) installed on your phone. **Since GetDex is only desinged for ART-supported android versions, I recommend EdXposed since Xposed has incomplete support on these android versions.**
+Before starting, you should have either [Xposed](https://github.com/rovo89/XposedInstaller) or [EdXposed](https://github.com/ElderDrivers/EdXposedManager) installed on your phone. **Since GetDex is only desinged for ART-supported android versions, I recommend EdXposed since Xposed has instable support on these android versions.**
 
 Until now, GetDex is only tested in Android 10.0.
 
@@ -55,7 +55,7 @@ After configuring package names, you also need to configure the filter to specif
 	......
 ```
 
-If you are not familiar with Kotlin, don't worry. You just need to write a java class `com.mivik.getdex.MainHook` which implemented `IXposedHookLoadPackage`, and hook the target application's `android.content.ContextWrapper.attachBaseContext` methods, and do the following steps before the hooked method starts (remember to remove the corresponding kotlin file):
+If you are not familiar with Kotlin, don't worry. You just need to write a java class `com.mivik.getdex.MainHook` which implemented `IXposedHookLoadPackage`, and hook the target application's `android.content.ContextWrapper.attachBaseContext` method, and do the following steps before the hooked method starts (remember to remove the corresponding kotlin file):
 
 ```java
 	Context context = (Context) param.args[0]
@@ -76,7 +76,7 @@ BTW, you can call `GetDex.fixClass(Class)` to fix a single class.
 
 It's a must-do to reboot your phone since Xposed plugins need rebooting to be activated.
 
-Note that I used a trick to simplify this step, so you don't need to reboot anymore after your first rebooting even you changed some code in this plugin. You just need to restart the application you want to hook into (or the application you want to dump dex from) to apply your changes.
+Note that I used a trick to simplify this step, so you don't need to reboot anymore after your first rebooting even you changed some code in this plugin. You just need to restart the application you want to hook into (the application you want to dump dex from) to apply your changes.
 
 ### Step 3. Start the target application
 
