@@ -4,6 +4,7 @@
 
 #include <linux/limits.h>
 #include <unordered_map>
+#include <sys/file.h>
 #include <pthread.h>
 #include <unistd.h>
 
@@ -20,22 +21,21 @@ extern "C" bool FixClass(mirror::Class* clz) {
 	static std::unordered_map<uint32_t, uint32_t> map;
 	const DexFile* dexFile = clz->GetDexCache()->GetDexFile();
 	if (!dexFile->is_compact_dex_) { // compact dex is not supported, but is easy to support
-		pthread_mutex_lock(&mutex);
 		LengthPrefixedArray<ArtMethod>& methods = *clz->GetMethods();
-		if (!clz->GetMethods()) {
-			LOGE("Failed to fix class %s: method array is null", clz->ComputeName()->ToModifiedUtf8().c_str());
-			pthread_mutex_unlock(&mutex);
-			return false;
-		}
+		if (!clz->GetMethods()) // no method
+			return true;
 		LOGE("Fixing class %s, method count: %u", clz->ComputeName()->ToModifiedUtf8().c_str(), methods.size);
 		const dex::ClassDef* class_def = clz->GetClassDef();
+
+		pthread_mutex_lock(&mutex);
 		sprintf(path, "%s/%zu.dex", output_path, dexFile->Size());
 		bool exists = access(path, F_OK)==0;
 		int fd = open(path, O_WRONLY | O_CREAT, 0600);
+		flock(fd, LOCK_EX);
+		pthread_mutex_unlock(&mutex);
 		if (!exists) write(fd, dexFile->begin_, dexFile->size_);
 		{
 			const uint8_t* classData = dexFile->DataPointer<uint8_t>(class_def->class_data_off_);
-			LOGE("class data: %p", classData);
 			uint32_t fieldCount = DecodeUnsignedLeb128(&classData)+DecodeUnsignedLeb128(&classData);
 			uint32_t directMethodCount = DecodeUnsignedLeb128(&classData);
 			uint32_t virtualMethodCount = DecodeUnsignedLeb128(&classData);
@@ -70,10 +70,10 @@ extern "C" bool FixClass(mirror::Class* clz) {
 			write(fd, item, OFFSET_OF(StandardCodeItem, insns_));
 			write(fd, item->insns_, item->insns_size_in_code_units_*sizeof(uint16_t));
 		}
+		flock(fd, LOCK_UN);
 		close(fd);
 		map.clear();
 		LOGE("Fixed");
-		pthread_mutex_unlock(&mutex);
 		return true;
 	}
 	return false;
