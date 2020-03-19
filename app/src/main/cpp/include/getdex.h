@@ -181,9 +181,19 @@ struct LengthPrefixedArray {
 
 struct Thread;
 
-mirror::Object* (*artReadBarrierMark)(mirror::Object* ptr);
-mirror::Object* (*artReadBarrierForRootSlow)(const GcRoot<mirror::Object>* root);
+mirror::Object* (*artReadBarrierMark_)(mirror::Object* ptr);
+mirror::Object* (*artReadBarrierForRootSlow_)(GcRoot<mirror::Object>* root);
 ObjPtr<mirror::Object> (*Thread_DecodeJObject)(Thread* thiz, jobject obj);
+
+inline mirror::Object* artReadBarrierMark(mirror::Object* ptr) {
+	if (artReadBarrierMark_) return artReadBarrierMark_(ptr);
+	return ptr;
+}
+
+inline mirror::Object* artReadBarrierForRootSlow(GcRoot<mirror::Object>* root) {
+	if (artReadBarrierForRootSlow_) return artReadBarrierForRootSlow_(root);
+	return root->root_.AsMirrorPtr();
+}
 
 // namespace mirror
 namespace mirror {
@@ -487,7 +497,7 @@ struct ArtMethod {
 	} ptr_sized_fields_;
 
 	inline uint32_t GetAccessFlags() const { return access_flags_.load(std::memory_order_relaxed); }
-	inline mirror::Class* GetDeclaringClass() const { return down_cast<mirror::Class*>(artReadBarrierForRootSlow(reinterpret_cast<const GcRoot<mirror::Object>*>(&declaring_class_))); }
+	inline mirror::Class* GetDeclaringClass() const { return down_cast<mirror::Class*>(artReadBarrierForRootSlow(reinterpret_cast<GcRoot<mirror::Object>*>(&declaring_class_))); }
 	inline ObjPtr<mirror::DexCache> GetDexCache() const {
 		if (LIKELY(!IsObsolete())) {
 			ObjPtr<mirror::Class> klass = GetDeclaringClass();
@@ -525,8 +535,8 @@ struct JNIEnvExt {
 
 inline void getdex_init() {
 	void* image = ndk_dlopen("libart.so", RTLD_LAZY);
-	LOAD_FUNCTION(artReadBarrierMark, "artReadBarrierMark");
-	LOAD_FUNCTION(artReadBarrierForRootSlow, "artReadBarrierForRootSlow");
+	LOAD_FUNCTION(artReadBarrierMark_, "artReadBarrierMark");
+	LOAD_FUNCTION(artReadBarrierForRootSlow_, "artReadBarrierForRootSlow");
 	LOAD_FUNCTION(mirror::String_ToModifiedUtf8, "_ZN3art6mirror6String14ToModifiedUtf8Ev");
 	LOAD_FUNCTION(mirror::Class_ComputeName, "_ZN3art6mirror5Class11ComputeNameENS_6HandleIS1_EE");
 	LOAD_FUNCTION(Thread_DecodeJObject, "_ZNK3art6Thread13DecodeJObjectEP8_jobject");
