@@ -24,63 +24,23 @@ Until now, GetDex is only tested in Android 10.0.
 
 ## Usage
 
-Here's simple three steps to dump "nopped" dex files from an application.
+Here's simple two steps to dump "nopped" dex files from an application.
 
-### Step 1. Configure package names and classes you want to fix
-
-Look into `app/src/main/java/com/mivik/mxp/Const.java` and modify the value of `SELF_PACKAGE_NAME` to the new package name if you want (note that `SELF_PACKAGE_NAME` must be equal with the one specified in project's build.gradle and AndroidManifest.xml), and **most importantly**, modify the value of `TARGET_PACKAGE_NAME` to the package you want to dump dex from. For example:
-
-```java
-public final class Const {
-	public static String T = "MXP";
-	public static final String SELF_PACKAGE_NAME = "com.mivik.getdex";
-	public static final String TARGET_PACKAGE_NAME = "com.tencent.mobileqq";
-
-	......
-}
-```
-
-After configuring package names, you also need to configure the filter to specify what class you want to fix since fixing system classes would possibly cause plugin to crash. The filter is located in `app/src/main/kotlin/com/mivik/getdex/MainHook.kt`. The interface `ClassFilter` is defined to receive a class name and return whether the class should be fixed (all the classes in the application will be passed into this filter). For example: 
-
-```kotlin
-	......
-	if (classLoader is BaseDexClassLoader) GetDex.fixAllClasses(
-		classLoader,
-		object : GetDex.ClassFilter {
-			override fun filter(className: String): Boolean {
-				return className.startsWith("com.tencent.mobileqq.")
-			}
-		})
-	else Log.e(T, "ClassLoader is not BaseDexClassLoader, please fixClass manually")
-	......
-```
-
-If you are not familiar with Kotlin, don't worry. You just need to write a java class `com.mivik.getdex.MainHook` which implemented `IXposedHookLoadPackage`, and hook the target application's `android.content.ContextWrapper.attachBaseContext` method, and do the following steps before the hooked method starts (remember to remove the corresponding kotlin file):
-
-```java
-	Context context = (Context) param.args[0]
-	GetDex.initialize(context)
-	if (context.classLoader instanceof BaseDexClassLoader)
-		GetDex.fixAllClasses((BaseDexClassLoader) context.classLoader, new GetDex.ClassFilter() {
-			@Override
-			public boolean filter(String className) {
-				// Your filter here
-				return false;
-			}
-		})
-```
-
-BTW, you can call `GetDex.fixClass(Class)` to fix a single class.
-
-### Step 2. Install the plugin and reboot your phone
+### Step 1. Install the plugin and reboot your phone
 
 It's a must-do to reboot your phone since Xposed plugins need rebooting to be activated.
 
 Note that I used a trick to simplify this step, so you don't need to reboot anymore after your first rebooting even you changed some code in this plugin. You just need to restart the application you want to hook into (the application you want to dump dex from) to apply your changes.
 
-### Step 3. Start the target application
+### Step 2. Activate MXP and input target package name
 
-That's all! After these three steps, you will see your dex dumped in `/data/data/[TARGET_PACKAGE_NAME]/files/getdex`. If you don't find any, please record all your logs contains 'GetDex' and post it as an issue.
+**If your Android version is above Q, MXP should be activated again everytime MXP is re-installed or your phone is rebooted**
+
+**In other situations, MXP is always activated and do not require manual activatation**
+
+**Note that manual activatation requires ROOT**
+
+After MXP is activated, you can input target package name in GetDex app, and click 'Confirm' to save it. After that, shutdown the target app (if needed) and restart it. You will see your dex dumped in `/data/data/[TARGET_PACKAGE_NAME]/files/getdex`. If you don't find any, please record all your logs contains 'GetDex' and post it as an issue.
 
 ## 🤝 Contributing
 
