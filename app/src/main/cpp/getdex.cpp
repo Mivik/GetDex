@@ -36,6 +36,12 @@ extern "C" bool FixClass(mirror::Class* clz) {
 		if (!exists) write(fd, dexFile->begin_, dexFile->size_);
 		{
 			const uint8_t* classData = dexFile->DataPointer<uint8_t>(class_def->class_data_off_);
+			if (classData==nullptr) {
+				LOGE("Class data is null");
+				flock(fd, LOCK_UN);
+				close(fd);
+				return false;
+			}
 			uint32_t fieldCount = DecodeUnsignedLeb128(&classData)+DecodeUnsignedLeb128(&classData);
 			uint32_t directMethodCount = DecodeUnsignedLeb128(&classData);
 			uint32_t virtualMethodCount = DecodeUnsignedLeb128(&classData);

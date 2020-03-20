@@ -497,7 +497,7 @@ struct ArtMethod {
 	} ptr_sized_fields_;
 
 	inline uint32_t GetAccessFlags() const { return access_flags_.load(std::memory_order_relaxed); }
-	inline mirror::Class* GetDeclaringClass() const { return down_cast<mirror::Class*>(artReadBarrierForRootSlow(reinterpret_cast<GcRoot<mirror::Object>*>(&declaring_class_))); }
+	inline mirror::Class* GetDeclaringClass() const { return down_cast<mirror::Class*>(artReadBarrierForRootSlow((GcRoot<mirror::Object>*) (&declaring_class_))); }
 	inline ObjPtr<mirror::DexCache> GetDexCache() const {
 		if (LIKELY(!IsObsolete())) {
 			ObjPtr<mirror::Class> klass = GetDeclaringClass();
