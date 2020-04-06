@@ -37,6 +37,16 @@ Note that I used [a trick](https://github.com/Mivik/MXP) to simplify this step, 
 
 After MXP is activated, you can input target package name in GetDex app, and click 'Confirm' to save it. After that, shutdown the target app (if needed) and restart it. You will see your dex dumped in `/data/data/[TARGET_PACKAGE_NAME]/files/getdex`. If you don't find any, please record all recent logs and post it as an issue.
 
+## Preview
+
+Original "noppped" dex (part): 
+
+![Before](https://s1.ax1x.com/2020/04/06/Gyy1Ff.jpg)
+
+After fixing by GetDex: 
+
+![After](https://s1.ax1x.com/2020/04/06/Gyy8fS.jpg)
+
 ## Author
 
 👤 **Mivik**

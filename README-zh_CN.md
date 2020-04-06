@@ -35,6 +35,16 @@ GetDex 是一个用于导出 dex 的 Xposed 插件，同时也能修复指令被
 
 在 MXP 被激活后，你就可以在 GetDex 的主界面中输入目标程序的报名，并点击“确定”来保存。在此之后，关闭目标程序（如果需要）并重启它，你应该就能在 `/data/data/[目标程序包名]/files/getdex` 文件夹下找到修复好的 dex 文件。如果你并没有找到任何文件，请收集你的日志并提一个 issue。
 
+## 预览
+
+原本的 "被nop" 的 dex：
+
+![Before](https://s1.ax1x.com/2020/04/06/Gyy1Ff.jpg)
+
+GetDex 修复后：
+
+![After](https://s1.ax1x.com/2020/04/06/Gyy8fS.jpg)
+
 ## 作者
 
 👤 **Mivik**
