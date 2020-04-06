@@ -7,12 +7,7 @@
 
 > A powerful tool to dump dex files whose instructions are replaced with nop
 
-## Author
-
-👤 **Mivik**
-
-* Website: https://mivik.gitee.io/
-* Github: [@Mivik](https://github.com/Mivik)
+[中文版本](./README-zh_CN.md)
 
 ## Introduction
 
@@ -20,7 +15,7 @@ GetDex is designed as a Xposed plugin to dump dex, which can also fix dex opcode
 
 Before starting, you should have either [Xposed](https://github.com/rovo89/XposedInstaller) or [EdXposed](https://github.com/ElderDrivers/EdXposedManager) installed on your phone. **Since GetDex is only desinged for ART-supported android versions, I recommend EdXposed since Xposed has instable support on these android versions.**
 
-Until now, GetDex is only tested in Android 10.0.
+**Until now, GetDex is only tested in Android 10**.
 
 ## Usage
 
@@ -30,21 +25,24 @@ Here's simple two steps to dump "nopped" dex files from an application.
 
 It's a must-do to reboot your phone since Xposed plugins need rebooting to be activated.
 
-Note that I used a trick to simplify this step, so you don't need to reboot anymore after your first rebooting even you changed some code in this plugin. You just need to restart the application you want to hook into (the application you want to dump dex from) to apply your changes.
+Note that I used [a trick](https://github.com/Mivik/MXP) to simplify this step, so you don't need to reboot anymore after your first rebooting even you changed some code in this plugin. You just need to restart the application you want to hook into (the application you want to dump dex from) to apply your changes.
 
 ### Step 2. Activate MXP and input target package name
 
-**If your Android version is above Q, MXP should be activated again everytime MXP is re-installed or your phone is rebooted**
+**If your Android version is above or equal to Q, MXP should be activated manually again everytime MXP is re-installed or your phone is rebooted**
 
 **In other situations, MXP is always activated and do not require manual activatation**
 
 **Note that manual activatation requires ROOT**
 
-After MXP is activated, you can input target package name in GetDex app, and click 'Confirm' to save it. After that, shutdown the target app (if needed) and restart it. You will see your dex dumped in `/data/data/[TARGET_PACKAGE_NAME]/files/getdex`. If you don't find any, please record all your logs contains 'GetDex' and post it as an issue.
+After MXP is activated, you can input target package name in GetDex app, and click 'Confirm' to save it. After that, shutdown the target app (if needed) and restart it. You will see your dex dumped in `/data/data/[TARGET_PACKAGE_NAME]/files/getdex`. If you don't find any, please record all recent logs and post it as an issue.
 
-## 🤝 Contributing
+## Author
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Mivik/GetDex/issues). 
+👤 **Mivik**
+
+* Website: https://mivik.gitee.io/
+* Github: [@Mivik](https://github.com/Mivik)
 
 ## Show your support
 
@@ -52,5 +50,5 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2020 [Mivik](https://github.com/Mivik).<br />
+Copyright © 2020 [Mivik](https://github.com/Mivik).
 This project is [GPL-3.0](https://github.com/Mivik/GetDex/blob/master/LICENSE.md) licensed.
