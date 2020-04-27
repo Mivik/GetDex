@@ -39,5 +39,5 @@ dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 	compileOnly 'de.robv.android.xposed:api:82'
-	implementation 'com.github.Mivik:MXP:1.0.0'
+	implementation 'com.github.Mivik:MXP:1.0.1'
 }
